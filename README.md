@@ -23,7 +23,7 @@ See Build.target for building 3 main .app files. This will identify all the incl
 * StartApplications is a list of all the main .app files
 * BuildTimeOutInSeconds: because the Aion build sometimes pops up message boxes when an invalid code file is being build, a timeout has been built in the buildtask that will kill the build process and fail the build.
 
-<pre>
+```xml
 	<Target Name="BuildAion">
 		<ItemGroup>
 		  <SourceDir Include='$(SourceDirectory)' />
@@ -40,7 +40,7 @@ See Build.target for building 3 main .app files. This will identify all the incl
 		<MSBuild Projects="Aion.proj" targets="Build" Properties="StartApplication=$(StartApplicationsList);ApplicationSourceDirectory=%(SourceDir.FullPath);ShouldRestoreCodeFromApp=true;BuildTimeOutInSeconds=90"
 				StopOnFirstFailure="True" />
 	</Target>
-</pre>
+```
 
 ## App header example ##
 In the following example this app (ApplicationDataLib) has 3 includes, 2 from own source and 1 from the Aion class libraries (the one that ends with -C):
