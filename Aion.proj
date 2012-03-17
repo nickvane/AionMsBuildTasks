@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<PropertyGroup>
+		<ApplicationSourceDirectory>$(SourceDirectory)</ApplicationSourceDirectory>
+		<StartApplication></StartApplication>
+		<AionBuildProcess>Respawn.exe</AionBuildProcess>
+		<BuildTimeOutInSeconds>60</BuildTimeOutInSeconds>
+		<ShouldRestoreCodeFromApp>True</ShouldRestoreCodeFromApp>
+		<AionMsBuildTasksAssembly>Aion.MsBuildTasks.dll</AionMsBuildTasksAssembly>
+	</PropertyGroup>
+
+	<UsingTask AssemblyFile="$(AionMsBuildTasksAssembly)" TaskName="BuildAionTask"/>
+	<UsingTask AssemblyFile="$(AionMsBuildTasksAssembly)" TaskName="AppBuildOrderTask"/>
+	
+	<Target Name="Build">
+		<AppBuildOrderTask SourceDirectory="$(ApplicationSourceDirectory)" StartAppPath="$(StartApplication)">
+			<Output TaskParameter="AppList" ItemName="ApplicationsToBuild" />
+		</AppBuildOrderTask>
+		
+		<BuildAionTask
+			ApplicationToBuild="%(ApplicationsToBuild.FullPath)"
+			AionBuildProcess="$(AionBuildProcess)"
+			BuildTimeOutInSeconds="$(BuildTimeOutInSeconds)"
+			ShouldRestoreCodeFromApp="$(ShouldRestoreCodeFromApp)"
+		/>
+	</Target>
+
+</Project>

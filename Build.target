@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<Target Name="MapSourceDirectory">
+		<RemoveDir Directories="C:\ApplicationName" ContinueOnError="true" />
+		<ConvertToAbsolutePath Paths="$(RootDirectory)">
+			<Output TaskParameter="AbsolutePaths" PropertyName="AbsoluteRootDirectory" />
+		</ConvertToAbsolutePath>
+		<Exec Command="mklink /J C:\ApplicationName $(DOUBLE_QUOTES)$(AbsoluteRootDirectory)$(DOUBLE_QUOTES)" />
+	</Target>
+
+	<Target Name="BuildAion">
+		<ItemGroup>
+		  <SourceDir Include='$(SourceDirectory)' />
+		</ItemGroup>
+		<ItemGroup>
+		  <StartApplications Include="%(SourceDir.FullPath)\FirstMain.app" />
+		  <StartApplications Include="%(SourceDir.FullPath)\SecondMain.app" />
+		  <StartApplications Include="%(SourceDir.FullPath)\ThridMain.app" />
+		</ItemGroup>
+		<PropertyGroup>
+		  <StartApplicationsList>@(StartApplications, '|')</StartApplicationsList>
+		</PropertyGroup>
+
+		<MSBuild Projects="Aion.proj" targets="Build" Properties="StartApplication=$(StartApplicationsList);ApplicationSourceDirectory=%(SourceDir.FullPath);ShouldRestoreCodeFromApp=true;BuildTimeOutInSeconds=90"
+				StopOnFirstFailure="True" />
+	</Target>
+</Project>
